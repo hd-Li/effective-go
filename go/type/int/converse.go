@@ -9,5 +9,8 @@ func main(){
 	
 	fmt.Println(data[0:int(len(data)/2)])
 	fmt.Println(data[int(len(data)/2):])
+	if 2.111 > 2 {
+		fmt.Println("it works that compares float with int")
+	}
 }
 

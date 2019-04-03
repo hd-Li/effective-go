@@ -2,27 +2,34 @@ package main
 
 import (
 	"fmt"
+	"container/list"
 )
 
-type node struct{
-	next *node
-	employee *employee
-} 
-
-type employee struct{
+type teacher struct{
 	id int32
 	name string
 	titile string
 }
-const size int = 100
+
+type student struct{
+	id int32
+	name string
+	grade int
+}
 
 func main(){
-	head := &node{}
-	l := 0
-	
-	hd := &employee{id:1895, name:"hd", titile:"intermediate"}
-	head.next = &node{employee: hd}
-	l++
-	fmt.Println(head.next.employee)
+	data := list.New()
+	han := teacher{id:1, name:"han", titile:"senior"}
+	hd := student{id:1895, name:"hd", grade:3}
+	if data.Len() == 0{
+		e_han := data.PushFront(han)
+		fmt.Println(data.Len())
+		fmt.Println(e_han.Value)
+		e_hd := data.InsertAfter(hd, e_han)
+		fmt.Println(e_hd.Value)
+		if e_hd.Next() == nil{
+			fmt.Println("it is not a loop list")
+		}
+	}
 }
 

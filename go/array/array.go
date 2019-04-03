@@ -2,20 +2,23 @@ package main
 
 import (
 	"fmt"
-	"unsafe"
-	"reflect"
 )
 
 func main(){
-	var a [5]int
-	a[1] = 1
-	b := 1
-	c := unsafe.Sizeof(b)
+	l := make([]int,10,10)
+	fmt.Println(len(l))
+	fmt.Println(cap(l))
 	
-    fmt.Println("the type of this value is: ", reflect.TypeOf(c))
-	
-	fmt.Println("a is :", a)
-	fmt.Println("the length of a is :", len(a))
-	fmt.Println("the capacity of a is :", cap(a))
+	for i:=0; i<cap(l)+1; i++{
+		fmt.Printf("i is %d\n", i)
+		if i >= cap(l){
+			l = append(l,i)
+			fmt.Printf("the cap is %d\n", cap(l))
+			fmt.Printf("the lenth is %d\n", len(l))
+		}else{
+			l[i]=i
+		}
+	}
+	fmt.Println(l)
 }
 
