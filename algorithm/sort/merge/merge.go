@@ -27,7 +27,7 @@ func merge(r_data, p_data []int) []int{
 			break
 		}
 		
-		if r_data[i] < p_data[j]{
+		if r_data[i] <= p_data[j]{
 			data[i+j] = r_data[i]
 			i++
 		}else{
