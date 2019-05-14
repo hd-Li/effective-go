@@ -2,39 +2,37 @@ package main
 
 import (
 	"fmt"
-	"sync"
-	"bytes"
-	"io"
-	"io/ioutil"
 	"time"
+	"sync"
 )
 
+var money int
+
 func main(){
-	var mu sync.Mutex
-	var buffer bytes.Buffer
-	sign := make(chan struct{}, 2)
-	
-	
-	go func(writer io.Writer){
-		defer func(){
-			sign <- struct{}{}
-		}() 
+	var mux sync.Mutex
 		
-		head := fmt.Sprint("i am hd\n")
-	    body := fmt.Sprint("i am wd\n")
-	    mu.Lock()
-		writer.Write([]byte(head))
-		writer.Write([]byte(body))
-		mu.Unlock()
-	}(&buffer)
+	go func(){
+		mux.Lock()
+		in(500)
+		time.Sleep(100*time.Millisecond)
+		see()
+		mux.Unlock()
+	}()
 	
-	test := fmt.Sprint("test\n")
-	mu.Lock()
-	(&buffer).Write([]byte(test))
-	time.Sleep(3*time.Second)
-	(&buffer).Write([]byte("test2\n"))
-	mu.Unlock()
-	<-sign
-	data, _ := ioutil.ReadAll(&buffer)
-	fmt.Printf("%s", data)
+	go func(){
+		mux.Lock()
+		in(200)
+		mux.Unlock()
+	}()
+	
+	time.Sleep(200*time.Millisecond)
+}
+
+func in(m int){
+	money = money + m
+	fmt.Printf("i in money %d\n", money)
+}
+
+func see(){
+	fmt.Printf("i have money %d\n", money)
 }
