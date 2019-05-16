@@ -5,12 +5,25 @@ import (
 	"fmt"
 )
 
+type Graph struct {
+	adj []*list.List
+	v int
+}
+
 func main(){
-	root := list.New()
-	a := list.Element{Value:1}
-	root.PushBack(a)
-	root.PushFront(list.Element{Value:0})
-	fmt.Println(root.Back())
-	fmt.Println(root.Front())
-	fmt.Printf("the type of value is %T", root.Front().Next().Value)
+	graph := newGraph(5)
+	fmt.Printf("the type of graph is %T", graph)
+}
+
+func newGraph(v int) *Graph{
+	graph := &Graph{}
+	adj := make([]*list.List, v)
+	for i := range adj{
+		adj[i] = list.New()
+		fmt.Println(i)
+	}
+	graph.adj = adj
+	graph.v = v
+	
+	return graph
 }
