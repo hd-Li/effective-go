@@ -23,8 +23,9 @@ func main(){
 	graph.addEdge(5, 7)
 	graph.addEdge(6, 7)
 	
-	graph.BFS(0, 7)
-	
+	graph.BFSTraverse(7)
+	fmt.Println()
+	graph.DFSTraverse(7)
 }
 
 func newGraph(v int) *Graph{
@@ -44,7 +45,7 @@ func (g *Graph)addEdge(s, t int){
 	g.adj[t].PushBack(s)
 }
 
-func (g *Graph)BFS(s, t int){
+func (g *Graph)BFSByLinkedList(s, t int){
 	if s == t{
 		return
 	}
@@ -58,42 +59,100 @@ func (g *Graph)BFS(s, t int){
 	notFound := true
 	
 	queue.PushBack(s)
+	visited[s] = true
 	prev[s] = -1
+	
 	for queue.Len() > 0 && notFound{
 		top := queue.Front()
-		if visited[top.Value.(int)] == false{
-			visited[top.Value.(int)] = true
-	    }
+		queue.Remove(top)
 		if g.adj[top.Value.(int)].Len() <= 0{
 			continue
 		}
-		pre := top
-		e := g.adj[top.Value.(int)].Front()
-	    for{
-	    	if e.Value.(int) == t{
-	    		notFound = false
-	    		prev[e.Value.(int)] = pre.Value.(int)
-	    		break
+		
+		linkedList := g.adj[top.Value.(int)]
+	    for e := linkedList.Front(); e != nil; e = e.Next(){
+	    	k := e.Value.(int)
+	    	if !visited[k]{
+	    		prev[k] = top.Value.(int)
+	    		if k == t{
+	    			notFound = false
+	    			break
+	    		}
+	    		visited[k] = true
+	    		queue.PushBack(k)
 	    	}
-	    	if visited[e.Value.(int)] == false{
-	    		visited[e.Value.(int)] = true
-	    		queue.PushBack(e.Value.(int))
-	    		prev[e.Value.(int)] = pre.Value.(int)
-	    	}
-	    	if e == g.adj[top.Value.(int)].Back(){
-	    		break
-	    	}
-	    	pre = e
-	    	e =  e.Next()
 	    }
-	    
-	    queue.Remove(top)
-	}
-	if !notFound{
-		printPrev(7, prev)
 	}
 	
-	 
+	if !notFound{
+		printPrev(7, prev)
+	} 
+}
+
+func BFSBySlice(s, t int) {
+	if s == t{
+		return
+	}
+}
+
+func (g *Graph)BFSTraverse(s int){
+	if s >= g.v{
+		fmt.Printf("the value of s is large than the number of this graph %d\n", g.v)
+		return
+	}
+	
+	var queue []int
+	prev := make([]int, g.v)
+	for index := range prev{
+		prev[index] = -1
+	}
+	visited := make([]bool, g.v)
+	queue = append(queue, s)
+	visited[s] = true
+	
+	for len(queue) > 0{
+		top := queue[0]
+		queue = queue[1:]
+		fmt.Printf("%d ", top)
+		linkedList := g.adj[top]
+		for e := linkedList.Front(); e != nil; e = e.Next(){
+			k := e.Value.(int)
+			if !visited[k]{
+				prev[k] = top
+				visited[k] =  true
+				queue = append(queue, k)
+			}
+		}
+	}
+}
+
+func (g *Graph)DFSTraverse(t int){
+	if t >= g.v || t < 0{
+		fmt.Println("input error")
+		return
+	}
+	
+	visited := make([]bool, g.v)
+	visited[t] =  true
+	prev := make([]int, g.v)
+	for i := range prev{
+		prev[i] = -1
+	}
+	
+	g.recurse(t, visited, prev)
+}
+
+func (g *Graph)recurse(t int, visited []bool, prev []int){
+	fmt.Printf("%d ", t)
+	linkedList := g.adj[t]
+	for e := linkedList.Front(); e != nil; e = e.Next(){
+		k := e.Value.(int)
+		if !visited[k]{
+			visited[k] = true
+			prev[k] = t
+			g.recurse(k, visited, prev)
+		}
+	}
 }
 
 func printPrev(t int, prev []int){
