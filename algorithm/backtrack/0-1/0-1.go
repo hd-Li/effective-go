@@ -13,36 +13,25 @@ func main(){
 	
 }
 
-func ByBackTrack(preStones []int, preWeight int, preRecord []int){
-	if len(preStones) <= 0 || preWeight <= 0{
+func ByBackTrack(stones []int, weight int, preRecord []int){
+	if len(stones) <= 0 || weight <= 0{
 		return
 	}
-	in := true
+	//fmt.Printf("the preRecord is %v\n", preRecord)
+	record0 := make([]int, len(preRecord))
+	record1 := make([]int, len(preRecord))
+    copy(record0, preRecord)
+    copy(record1, preRecord)
+	ByBackTrack(stones[1:], weight, record0)
 	
-	if in{
-		s := preStones[0]
-		weight := preWeight - s
-		if weight > 0{
-			preRecord = append(preRecord, s)
-			if len(preStones) == 1{
-				fmt.Println(preRecord)
-			}else{
-				stones := preStones[1:]
-				var record []int
-				copy(record, preRecord)
-				ByBackTrack(stones, weight, record)
-			}
-		}else{
-			fmt.Println(preRecord)
+	weight = weight - stones[0]
+	if weight > 0{
+		record1 = append(record1, stones[0])
+		ByBackTrack(stones[1:], weight, record1)
+	}else{
+		if weight == 0{
+			record1 = append(record1, stones[0])
 		}
-	}
-	
-	in = false
-	
-	if !in{
-		if len(preStones) > 1{
-			stones := preStones[1:]
-			ByBackTrack(stones, preWeight, preRecord)
-		}
+		fmt.Println(record1)
 	}
 }
