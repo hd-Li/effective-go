@@ -25,7 +25,7 @@ func main(){
 	
 	graph.BFSTraverse(7)
 	fmt.Println()
-	graph.DFSTraverse(7)
+	graph.DFSTraverse(0)
 }
 
 func newGraph(v int) *Graph{
